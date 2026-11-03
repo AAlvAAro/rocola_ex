@@ -28,10 +28,11 @@ for prompt in "$P1" "$P2" "$P3"; do
      --allowedTools "Bash(mix *)" "Bash(ls *)" "Bash(grep *)" Read Edit Write Glob Grep \
      --max-budget-usd 5 2>/dev/null)
   echo "$json" > "$out/$label-$i.json"
+  json=$(jq 'if type=="array" then .[-1] else . end' <<<"$json")  # claude -p returns an event array; last = result
   cost=$(jq -r '.total_cost_usd // 0' <<<"$json"); turns=$(jq -r '.num_turns // 0' <<<"$json")
   dur=$(jq -r '((.duration_ms // 0)/1000|floor)' <<<"$json")
   cd "$wt"
-  (mix precommit >/dev/null 2>&1 && pc=pass) || pc=fail
+  if mix precommit >/dev/null 2>&1; then pc=pass; else pc=fail; fi
   git add -N . ; git diff HEAD > "$out/$label-$i.patch"
   # checklist, scored from the diff (1 = yes). add_only/restricted semantics are in docs/homework-1.md
   via=1; grep -rqE "Spotify\.(Fake|Web)" lib/rocola_web lib/rocola/jukebox 2>/dev/null && via=0
