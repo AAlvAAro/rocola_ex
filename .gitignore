@@ -48,3 +48,6 @@ config/*.secret.exs
 
 # Python bytecode
 __pycache__/
+
+# Impeccable runtime output
+.impeccable/review/
