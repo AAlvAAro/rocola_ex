@@ -1,0 +1,7 @@
+label,prompt,cost_usd,turns,duration_s,precommit,via_behaviour,fake_updated,no_net_tests,add_only_queue
+baseline,P1,0.22047520000000007,10,36,pass,1,1,1,1
+baseline,P2,0.24192639999999999,12,44,pass,1,1,1,1
+baseline,P3,0.22748470000000007,10,42,pass,1,1,1,1
+with_skill,P1,0.233991,15,38,pass,1,1,1,1
+with_skill,P2,0.2583461,14,46,pass,1,1,1,1
+with_skill,P3,0.21170920000000001,8,34,pass,1,1,1,1

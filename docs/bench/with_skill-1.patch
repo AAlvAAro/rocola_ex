@@ -1,0 +1,325 @@
+diff --git a/.claude/skills/session-steps/SKILL.md b/.claude/skills/session-steps/SKILL.md
+deleted file mode 100644
+index 98cc7a0..0000000
+--- a/.claude/skills/session-steps/SKILL.md
++++ /dev/null
+@@ -1,32 +0,0 @@
+----
+-name: session-steps
+-description: Scan the current chat for what was actually done (files created, decisions, commands, fixes), append it as numbered steps to the running Rocola steps log, and rebuild a formatted, shareable .docx. With the argument `deck`, also generate a "what's new" PowerPoint (only steps not yet presented) in the sample deck's style. Use when asked to document, log, or share what was done in this session, update the steps doc, or make a presentation of what's new. Not for writing code, README or ADR content, or committing.
+-argument-hint: "[deck]"
+----
+-
+-# session-steps
+-
+-Argument: `$ARGUMENTS` (empty, or `deck`).
+-
+-State lives in `docs/steps/` (gitignored, never commit):
+-- `steps.json`: source of truth
+-- `rocola-steps.docx`: rebuilt from it every run, so it only grows
+-- `whats-new-YYYYMMDD.pptx`: only with `deck`
+-
+-## Procedure
+-1. Read `docs/steps/steps.json` (create it with the schema below if missing). Never rewrite or drop existing entries.
+-2. Scan the chat since the last logged entry. Only things that really happened: files written/edited, commands run and their result, decisions with the reason. No invented steps, no secrets or tokens.
+-3. Add ONE entry per topic worked on, written as a guide someone could follow: `summary` (1-2 sentences), 3-6 steps, each with `title` (short verb phrase), `detail` (what to do), `why` (the reason) and `how` (command or file path, optional). Also `headline` (a claim, for the deck) and 2-3 `takeaways` (short, high level). Docx = the full step-by-step; deck = only headline, takeaways and summary.
+-4. Update `topics[].status` (`done` | `in_progress` | `todo`). Topics for this homework: `CLAUDE.md`, `SKILL.md`, `Guardrail hook`. Add a topic only if the user starts a new one.
+-5. Run `uv run .claude/skills/session-steps/build.py docx`.
+-6. If the argument is `deck`: run `uv run .claude/skills/session-steps/build.py deck`. It uses entries with `"deck": false` and flips them to true, so the next deck only has what's new. Style rules are in `style.md`.
+-7. Reply with the output path(s) and a 2-line summary of what was added. Nothing else.
+-
+-## Schema
+-```json
+-{"topics":[{"name":"CLAUDE.md","status":"done"}],
+- "entries":[{"date":"2026-11-03","topic":"CLAUDE.md","title":"Wrote the project rules",
+-             "headline":"One file keeps the agent on the rails","summary":"...","takeaways":["..."],
+-             "steps":[{"title":"Define scope","detail":"...","why":"...","how":"CLAUDE.md"}],
+-             "deck":false}]}
+-```
+diff --git a/.claude/skills/session-steps/build.py b/.claude/skills/session-steps/build.py
+deleted file mode 100644
+index c76ecf2..0000000
+--- a/.claude/skills/session-steps/build.py
++++ /dev/null
+@@ -1,158 +0,0 @@
+-# /// script
+-# dependencies = ["python-docx", "python-pptx"]
+-# ///
+-"""Rebuild docs/steps/rocola-steps.docx (all entries) or a "what's new" deck (entries not yet in a deck).
+-
+-Usage (from repo root):  uv run .claude/skills/session-steps/build.py docx|deck
+-Source of truth: docs/steps/steps.json (see SKILL.md for schema). The docx is always rebuilt
+-from the log, so it grows with every run and never drifts from it.
+-"""
+-import json, sys
+-from datetime import date
+-from pathlib import Path
+-
+-DIR = Path("docs/steps")
+-LOG = DIR / "steps.json"
+-# Palette/fonts come from style.md (derived from the sample deck).
+-INK, PAPER, ACCENT, MUTED, CARD_LINE = "131418", "F5F3EF", "B5243E", "6B6E76", "E4E2DC"
+-SANS, MONO = "Helvetica Neue", "Menlo"
+-STATUS = {"done": ("Done", "2E7D4F"), "in_progress": ("In progress", "B7791F"), "todo": ("To do", "6B6E76")}
+-
+-
+-def rgb(h):
+-    from docx.shared import RGBColor
+-    return RGBColor.from_string(h)
+-
+-
+-def shade(cell, hex_):
+-    from docx.oxml import OxmlElement
+-    from docx.oxml.ns import qn
+-    tcPr = cell._tc.get_or_add_tcPr()
+-    el = OxmlElement("w:shd")
+-    el.set(qn("w:val"), "clear"); el.set(qn("w:fill"), hex_)
+-    tcPr.append(el)
+-
+-
+-def build_docx(log):
+-    from docx import Document
+-    from docx.shared import Pt, Cm
+-
+-    d = Document()
+-    for s in d.sections:
+-        s.left_margin = s.right_margin = Cm(2.2)
+-    st = d.styles["Normal"]; st.font.name = SANS; st.font.size = Pt(10.5)
+-    for name, size, color in (("Title", 28, INK), ("Heading 1", 18, INK), ("Heading 2", 13, ACCENT)):
+-        h = d.styles[name]; h.font.name = SANS; h.font.size = Pt(size); h.font.bold = True
+-        h.font.color.rgb = rgb(color)
+-
+-    d.add_paragraph("TECH LOG").runs[0].font.name = MONO
+-    d.add_heading("Rocola: build steps", 0)
+-    p = d.add_paragraph(f"Updated {date.today():%Y-%m-%d}. Grows with every session.")
+-    p.runs[0].font.color.rgb = rgb(MUTED)
+-
+-    d.add_heading("Progress", 1)
+-    t = d.add_table(rows=1, cols=2); t.style = "Table Grid"
+-    for c, txt in zip(t.rows[0].cells, ("Topic", "Status")):
+-        c.text = ""; r = c.paragraphs[0].add_run(txt.upper()); r.font.name = MONO; r.font.size = Pt(9)
+-        r.bold = True; r.font.color.rgb = rgb("FFFFFF"); shade(c, INK)
+-    for tp in log["topics"]:
+-        label, color = STATUS[tp["status"]]
+-        row = t.add_row().cells
+-        row[0].text = tp["name"]
+-        row[1].text = ""; r = row[1].paragraphs[0].add_run(label); r.bold = True; r.font.color.rgb = rgb(color)
+-
+-    for tp in log["topics"]:
+-        entries = [e for e in log["entries"] if e["topic"] == tp["name"]]
+-        if not entries:
+-            continue
+-        d.add_heading(tp["name"], 1)
+-        for e in entries:
+-            d.add_heading(f'{e["title"]}  ·  {e["date"]}', 2)
+-            if e.get("summary"):
+-                d.add_paragraph(e["summary"]).runs[0].italic = True
+-            for i, s in enumerate(e["steps"], 1):
+-                p = d.add_paragraph(); p.paragraph_format.space_before = Pt(8); p.paragraph_format.keep_with_next = True
+-                r = p.add_run(f"Step {i}  "); r.font.name = MONO; r.font.size = Pt(9); r.font.color.rgb = rgb(ACCENT)
+-                p.add_run(s["title"]).bold = True
+-                if s.get("detail"):
+-                    d.add_paragraph(s["detail"])
+-                if s.get("why"):
+-                    q = d.add_paragraph(); q.paragraph_format.left_indent = Cm(0.6)
+-                    q.add_run("Why: ").bold = True; q.add_run(s["why"])
+-                if s.get("how"):
+-                    q = d.add_paragraph(); q.paragraph_format.left_indent = Cm(0.6)
+-                    r = q.add_run(s["how"]); r.font.name = MONO; r.font.size = Pt(9)
+-    out = DIR / "rocola-steps.docx"
+-    d.save(out); return out
+-
+-
+-def build_deck(log):
+-    from pptx import Presentation
+-    from pptx.util import Inches, Pt
+-    from pptx.dml.color import RGBColor
+-    from pptx.enum.shapes import MSO_SHAPE
+-
+-    new = [e for e in log["entries"] if not e.get("deck")]
+-    if not new:
+-        sys.exit("Nothing new since the last deck.")
+-    C = lambda h: RGBColor.from_string(h)
+-    pr = Presentation(); pr.slide_width, pr.slide_height = Inches(13.333), Inches(7.5)
+-    blank = pr.slide_layouts[6]
+-
+-    def slide(bg):
+-        s = pr.slides.add_slide(blank)
+-        s.background.fill.solid(); s.background.fill.fore_color.rgb = C(bg); return s
+-
+-    def text(s, x, y, w, h, txt, size, color, font=SANS, bold=False):
+-        tb = s.shapes.add_textbox(Inches(x), Inches(y), Inches(w), Inches(h)); tf = tb.text_frame
+-        tf.word_wrap = True; r = tf.paragraphs[0].add_run(); r.text = txt
+-        r.font.size, r.font.name, r.font.bold, r.font.color.rgb = Pt(size), font, bold, C(color)
+-
+-    def card(s, x, y, w, h, fill="FFFFFF", line=CARD_LINE):
+-        sh = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(x), Inches(y), Inches(w), Inches(h))
+-        sh.fill.solid(); sh.fill.fore_color.rgb = C(fill); sh.line.color.rgb = C(line); sh.shadow.inherit = False
+-        return sh
+-
+-    s = slide(INK)
+-    text(s, 0.9, 0.9, 6, 0.4, "WHAT'S NEW", 12, "A9ABB2", MONO)
+-    text(s, 0.9, 2.7, 11.5, 1.3, "Rocola: " + ", ".join(sorted({e["topic"] for e in new})), 44, "F5F3EF", bold=True)
+-    text(s, 0.9, 5.2, 8, 0.4, f"{date.today():%Y-%m-%d}  ·  elixir + phoenix liveview + spotify web api", 11, "A9ABB2", MONO)
+-
+-    for e in new:  # one summary slide per entry: headline + up to 3 takeaways, not the step-by-step
+-        s = slide(PAPER)
+-        text(s, 0.9, 0.85, 8, 0.4, e["topic"].upper(), 11, MUTED, MONO)
+-        text(s, 0.9, 1.2, 11.5, 0.9, e.get("headline", e["title"]), 32, INK, bold=True)
+-        pts = (e.get("takeaways") or [x["title"] for x in e["steps"]])[:3]
+-        w, gap = 3.55, 0.45
+-        for i, t in enumerate(pts):
+-            x = 0.9 + i * (w + gap)
+-            card(s, x, 2.6, w, 2.2)
+-            text(s, x + 0.3, 2.8, 3, 0.4, f"{i + 1}", 11, ACCENT if i == len(pts) - 1 else MUTED, MONO)
+-            text(s, x + 0.3, 3.3, 3, 1.4, t, 16, INK, bold=True)
+-        if e.get("summary"):
+-            text(s, 0.9, 5.2, 11.5, 0.9, e["summary"], 14, "3A3C42")
+-
+-    s = slide(PAPER)
+-    text(s, 0.9, 0.85, 8, 0.4, "PROGRESS", 11, MUTED, MONO)
+-    text(s, 0.9, 1.2, 11.5, 0.9, "Where we are", 32, INK, bold=True)
+-    for i, tp in enumerate(log["topics"][:3]):
+-        label, color = STATUS[tp["status"]]; x = 0.9 + i * 3.9
+-        card(s, x, 2.6, 3.5, 2.0)
+-        text(s, x + 0.3, 2.85, 3, 0.4, label.upper(), 11, color, MONO, True)
+-        text(s, x + 0.3, 3.4, 3, 0.8, tp["name"], 22, INK, bold=True)
+-
+-    for e in new:
+-        e["deck"] = True
+-    out = DIR / f"whats-new-{date.today():%Y%m%d}.pptx"
+-    pr.save(out); return out
+-
+-
+-if __name__ == "__main__":
+-    cmd = sys.argv[1] if len(sys.argv) > 1 else ""
+-    if cmd not in ("docx", "deck"):
+-        sys.exit(__doc__)
+-    log = json.loads(LOG.read_text())
+-    out = (build_docx if cmd == "docx" else build_deck)(log)
+-    if cmd == "deck":
+-        LOG.write_text(json.dumps(log, indent=2, ensure_ascii=False))  # persist deck=true flags
+-    print(out)
+diff --git a/.claude/skills/session-steps/style.md b/.claude/skills/session-steps/style.md
+deleted file mode 100644
+index d593bc2..0000000
+--- a/.claude/skills/session-steps/style.md
++++ /dev/null
+@@ -1,18 +0,0 @@
+-# Deck style (derived from "Semantic Search in Rails.pdf")
+-
+-Editorial, quiet, lots of whitespace. Implemented in `build.py`; change tokens there.
+-
+-| Token | Value | Use |
+-|---|---|---|
+-| ink | `#131418` | title-slide background, headlines, dark pills |
+-| paper | `#F5F3EF` | content-slide background |
+-| accent | `#B5243E` | one highlight per slide (last step, key number, cutoff line) |
+-| muted | `#6B6E76` | eyebrows, captions |
+-| card line | `#E4E2DC` | 1px border on white cards |
+-| sans | Helvetica Neue (sample uses a grotesque like Söhne) | headlines bold, body regular |
+-| mono | Menlo | eyebrows (UPPERCASE, small), numbers, code |
+-
+-Layout: 16:9, 0.9in left margin. Every content slide = mono eyebrow (topic) + bold headline (a
+-claim, not a label) + white cards (max 3 takeaways in the deck, numbered, one line each; step detail belongs in the docx) + optional one-line caption.
+-Title slide is dark, eyebrow top-left, huge headline, mono tech-stack line bottom-left.
+-Never: gradients, shadows, stock icons, more than one accent per slide, bullet lists.
+diff --git a/lib/rocola_web/live/request_live.ex b/lib/rocola_web/live/request_live.ex
+new file mode 100644
+index 0000000..af85e3b
+--- /dev/null
++++ b/lib/rocola_web/live/request_live.ex
+@@ -0,0 +1,40 @@
++defmodule RocolaWeb.RequestLive do
++  use RocolaWeb, :live_view
++
++  # ponytail: Spotify has no push for track changes, so poll. Move to PubSub
++  # from the playback-owning context once one exists.
++  @poll_ms 3_000
++
++  @impl true
++  def mount(_params, _session, socket) do
++    if connected?(socket), do: send(self(), :poll)
++    {:ok, assign(socket, now_playing: nil)}
++  end
++
++  @impl true
++  def handle_info(:poll, socket) do
++    Process.send_after(self(), :poll, @poll_ms)
++
++    case Rocola.Spotify.now_playing() do
++      {:ok, track} -> {:noreply, assign(socket, now_playing: track)}
++      {:error, _} -> {:noreply, socket}
++    end
++  end
++
++  @impl true
++  def render(assigns) do
++    ~H"""
++    <Layouts.app flash={@flash}>
++      <div id="now-playing" class="alert mb-6">
++        <%= if @now_playing do %>
++          <span>
++            Now playing: <strong>{@now_playing.name}</strong> by {@now_playing.artist}
++          </span>
++        <% else %>
++          <span>Nothing playing</span>
++        <% end %>
++      </div>
++    </Layouts.app>
++    """
++  end
++end
+diff --git a/lib/rocola_web/router.ex b/lib/rocola_web/router.ex
+index 50af481..8960274 100644
+--- a/lib/rocola_web/router.ex
++++ b/lib/rocola_web/router.ex
+@@ -17,7 +17,7 @@ defmodule RocolaWeb.Router do
+   scope "/", RocolaWeb do
+     pipe_through :browser
+ 
+-    get "/", PageController, :home
++    live "/", RequestLive
+   end
+ 
+   # Other scopes may use custom stacks.
+diff --git a/test/rocola_web/controllers/page_controller_test.exs b/test/rocola_web/controllers/page_controller_test.exs
+index f12b068..b2e6e98 100644
+--- a/test/rocola_web/controllers/page_controller_test.exs
++++ b/test/rocola_web/controllers/page_controller_test.exs
+@@ -1,8 +1,8 @@
+ defmodule RocolaWeb.PageControllerTest do
+   use RocolaWeb.ConnCase
+ 
+-  test "GET /", %{conn: conn} do
++  test "GET / serves the guest page", %{conn: conn} do
+     conn = get(conn, ~p"/")
+-    assert html_response(conn, 200) =~ "Peace of mind from prototype to production"
++    assert html_response(conn, 200) =~ "now-playing"
+   end
+ end
+diff --git a/test/rocola_web/live/request_live_test.exs b/test/rocola_web/live/request_live_test.exs
+new file mode 100644
+index 0000000..5703775
+--- /dev/null
++++ b/test/rocola_web/live/request_live_test.exs
+@@ -0,0 +1,19 @@
++defmodule RocolaWeb.RequestLiveTest do
++  use RocolaWeb.ConnCase
++  import Phoenix.LiveViewTest
++
++  setup do
++    Rocola.Spotify.Fake.reset()
++    :ok
++  end
++
++  test "banner updates when the song changes", %{conn: conn} do
++    {:ok, view, html} = live(conn, ~p"/")
++    assert html =~ "Nothing playing"
++
++    :ok = Rocola.Spotify.transfer_playback("fake-living-room")
++    :ok = Rocola.Spotify.add_to_queue("fake:track:0-0")
++    send(view.pid, :poll)
++    assert render(view) =~ "Midnight Aurora"
++  end
++end

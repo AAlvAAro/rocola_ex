@@ -45,3 +45,6 @@ Semantic Search in Rails.pdf
 .env
 config/*.secret.exs
 .DS_Store
+
+# Python bytecode
+__pycache__/

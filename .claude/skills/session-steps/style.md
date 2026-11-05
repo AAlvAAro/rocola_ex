@@ -13,6 +13,6 @@ Editorial, quiet, lots of whitespace. Implemented in `build.py`; change tokens t
 | mono | Menlo | eyebrows (UPPERCASE, small), numbers, code |
 
 Layout: 16:9, 0.9in left margin. Every content slide = mono eyebrow (topic) + bold headline (a
-claim, not a label) + white cards (max 3 takeaways in the deck, numbered, one line each; step detail belongs in the docx) + optional one-line caption.
+claim, not a label) + a row of numbered step cards (titles only, max 4) + one code card (mono, max ~14 lines) + one-line caption.
 Title slide is dark, eyebrow top-left, huge headline, mono tech-stack line bottom-left.
 Never: gradients, shadows, stock icons, more than one accent per slide, bullet lists.
