@@ -1,66 +1,121 @@
-<Layouts.flash_group flash={@flash} />
+<div data-theme="rocola" class="min-h-screen bg-base-100 font-body text-base-content">
+  <Layouts.flash_group flash={@flash} />
 
-<header class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
-  <a href="/" class="flex items-center gap-2 text-lg font-bold">
-    <.icon name="hero-musical-note" class="size-6 text-primary" /> Rocola
-  </a>
-  <Layouts.theme_toggle />
-</header>
+  <header class="mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6">
+    <a
+      href="/"
+      class="flex items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-primary"
+    >
+      <span class="flex h-6 items-end gap-0.5" aria-hidden="true">
+        <span class="h-full w-1.5 origin-bottom animate-eq rounded-sm bg-primary motion-reduce:animate-none"></span>
+        <span class="h-full w-1.5 origin-bottom animate-eq rounded-sm bg-primary [animation-delay:-0.4s] motion-reduce:animate-none"></span>
+        <span class="h-full w-1.5 origin-bottom animate-eq rounded-sm bg-primary [animation-delay:-0.8s] motion-reduce:animate-none"></span>
+      </span>
+      <span class="font-display text-3xl tracking-wide">Rocola</span>
+    </a>
+  </header>
 
-<main class="mx-auto max-w-5xl px-4 sm:px-6">
-  <section class="py-16 text-center sm:py-24">
-    <h1 class="text-4xl font-extrabold tracking-tight sm:text-6xl">
-      The jukebox for your <span class="whitespace-nowrap">get-togethers</span>
-    </h1>
-    <p class="mx-auto mt-6 max-w-xl text-lg text-base-content/70">
-      Guests scan a QR code, search Spotify and add songs to the queue.
-      Rocola runs on a Raspberry Pi and plays through the speaker you already have.
-    </p>
-    <a href="#how-it-works" class="btn btn-primary btn-lg mt-8">How it works</a>
-  </section>
+  <main class="mx-auto max-w-6xl px-4 sm:px-6">
+    <%!-- Hero --%>
+    <section class="grid items-center gap-12 py-12 lg:grid-cols-2 lg:py-24">
+      <div>
+        <p class="font-semibold uppercase tracking-widest text-primary">Home jukebox</p>
+        <h1 class="mt-3 font-display text-6xl leading-[0.95] tracking-wide sm:text-7xl lg:text-8xl">
+          The jukebox for your <span class="whitespace-nowrap">get-togethers</span>
+        </h1>
+        <p class="mt-6 max-w-lg text-lg text-base-content/75 sm:text-xl">
+          Guests scan a QR code, search Spotify and add songs to the queue.
+          Rocola runs on a Raspberry Pi and plays through the speaker you already have.
+        </p>
+        <a
+          href="#how-it-works"
+          class="btn btn-primary btn-lg mt-8 min-h-12 px-8 text-lg transition-colors duration-200"
+        >
+          See how it works <.icon name="hero-arrow-down" class="size-5" />
+        </a>
+      </div>
 
-  <section id="how-it-works" class="py-12">
-    <h2 class="text-center text-2xl font-bold sm:text-3xl">How it works</h2>
-    <ol class="mt-10 grid gap-6 sm:grid-cols-3">
-      <li class="card bg-base-200">
-        <div class="card-body">
-          <.icon name="hero-qr-code" class="size-8 text-primary" />
-          <h3 class="card-title">1. Scan the QR</h3>
-          <p class="text-base-content/70">No app or account needed. Just the phone camera.</p>
+      <%!-- Showcase: what a guest sees --%>
+      <div class="mx-auto w-full max-w-sm rounded-3xl border border-neutral bg-base-200 p-5 shadow-2xl shadow-secondary/20">
+        <p class="text-sm font-semibold uppercase tracking-widest text-base-content/60">
+          Now playing
+        </p>
+        <div class="mt-3 flex items-center gap-4 rounded-2xl bg-secondary p-4 text-secondary-content">
+          <div class="flex size-14 shrink-0 items-center justify-center rounded-xl bg-accent">
+            <.icon name="hero-musical-note" class="size-7" />
+          </div>
+          <div class="min-w-0">
+            <p class="truncate font-semibold">Your song here</p>
+            <p class="truncate text-sm opacity-80">Requested by Ana</p>
+          </div>
         </div>
-      </li>
-      <li class="card bg-base-200">
-        <div class="card-body">
-          <.icon name="hero-magnifying-glass" class="size-8 text-primary" />
-          <h3 class="card-title">2. Search a song</h3>
-          <p class="text-base-content/70">Find any track in the Spotify catalog.</p>
-        </div>
-      </li>
-      <li class="card bg-base-200">
-        <div class="card-body">
-          <.icon name="hero-queue-list" class="size-8 text-primary" />
-          <h3 class="card-title">3. It joins the queue</h3>
-          <p class="text-base-content/70">
-            Plays on your Sonos, phone or smart speaker.
-          </p>
-        </div>
-      </li>
-    </ol>
-  </section>
-
-  <section class="py-12">
-    <div class="card bg-base-200">
-      <div class="card-body">
-        <h2 class="card-title text-xl">House rules</h2>
-        <ul class="list-disc space-y-1 pl-5 text-base-content/70">
-          <li>Up to 3 songs per guest every 30 minutes, so everyone gets a turn.</li>
-          <li>A song that's already in the queue can't be requested again.</li>
+        <p class="mt-5 text-sm font-semibold uppercase tracking-widest text-base-content/60">
+          Up next
+        </p>
+        <ul class="mt-2 divide-y divide-base-300">
+          <li
+            :for={
+              {song, guest} <- [
+                {"A song from the 80s", "Luis"},
+                {"Something to dance to", "Mar"},
+                {"The one everyone sings", "Diego"}
+              ]
+            }
+            class="flex items-center justify-between gap-3 py-3"
+          >
+            <span class="min-w-0">
+              <span class="block truncate">{song}</span>
+              <span class="block text-sm text-base-content/60">{guest}</span>
+            </span>
+            <.icon name="hero-queue-list" class="size-5 shrink-0 text-base-content/40" />
+          </li>
         </ul>
       </div>
-    </div>
-  </section>
-</main>
+    </section>
 
-<footer class="mx-auto max-w-5xl px-4 py-10 text-center text-sm text-base-content/60 sm:px-6">
-  A personal, non-commercial project. Not affiliated with or endorsed by Spotify.
-</footer>
+    <%!-- How it works --%>
+    <section id="how-it-works" class="scroll-mt-8 py-16">
+      <h2 class="font-display text-5xl tracking-wide sm:text-6xl">How it works</h2>
+      <ol class="mt-10 grid gap-4 sm:grid-cols-3">
+        <li class="rounded-3xl bg-primary p-7 text-primary-content">
+          <span class="font-display text-6xl">01</span>
+          <h3 class="mt-4 text-2xl font-bold">Scan the QR</h3>
+          <p class="mt-2 text-lg opacity-80">No app or account needed. Just the phone camera.</p>
+        </li>
+        <li class="rounded-3xl bg-secondary p-7 text-secondary-content">
+          <span class="font-display text-6xl">02</span>
+          <h3 class="mt-4 text-2xl font-bold">Search a song</h3>
+          <p class="mt-2 text-lg opacity-80">Find any track in the Spotify catalog.</p>
+        </li>
+        <li class="rounded-3xl bg-base-300 p-7">
+          <span class="font-display text-6xl text-primary">03</span>
+          <h3 class="mt-4 text-2xl font-bold">It joins the queue</h3>
+          <p class="mt-2 text-lg text-base-content/75">
+            Plays on your Sonos, phone or smart speaker.
+          </p>
+        </li>
+      </ol>
+    </section>
+
+    <%!-- House rules --%>
+    <section class="py-16">
+      <div class="rounded-3xl border border-neutral bg-base-200 p-7 sm:p-10">
+        <h2 class="font-display text-5xl tracking-wide">House rules</h2>
+        <ul class="mt-6 grid gap-4 text-lg sm:grid-cols-2">
+          <li class="flex gap-3">
+            <.icon name="hero-clock" class="mt-1 size-6 shrink-0 text-primary" />
+            <span>Up to <strong>3 songs per guest every 30 minutes</strong>, so everyone gets a turn.</span>
+          </li>
+          <li class="flex gap-3">
+            <.icon name="hero-no-symbol" class="mt-1 size-6 shrink-0 text-primary" />
+            <span>A song that's <strong>already in the queue</strong> can't be requested again.</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="mx-auto max-w-6xl px-4 py-10 text-center text-base-content/60 sm:px-6">
+    A personal, non-commercial project. Not affiliated with or endorsed by Spotify.
+  </footer>
+</div>
