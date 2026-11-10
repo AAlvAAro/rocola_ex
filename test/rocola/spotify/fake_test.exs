@@ -1,6 +1,7 @@
 defmodule Rocola.Spotify.FakeTest do
   use ExUnit.Case, async: false
   alias Rocola.Spotify
+  alias Rocola.Spotify.Fake
 
   setup do
     Rocola.Spotify.Fake.reset()
@@ -31,5 +32,23 @@ defmodule Rocola.Spotify.FakeTest do
     :ok = Spotify.add_to_queue(b.uri)
     assert {:ok, ^a} = Spotify.now_playing()
     assert {:ok, [^b]} = Spotify.queue()
+  end
+
+  test "put_devices/1 replaces the list; reset/0 restores the seed and clears commands" do
+    extra = %{id: "x", name: "Kitchen", is_active: false, is_restricted: false}
+    :ok = Fake.put_devices([extra])
+    assert {:ok, [^extra]} = Spotify.devices()
+    Spotify.transfer_playback("x")
+    assert Fake.commands() == [{:transfer_playback, "x"}]
+
+    Fake.reset()
+    assert {:ok, devs} = Spotify.devices()
+    assert Enum.map(devs, & &1.id) == ["fake-living-room", "fake-locked"]
+    assert Fake.commands() == []
+  end
+
+  test "put_devices({:error, reason}) makes devices/0 fail" do
+    :ok = Fake.put_devices({:error, :unavailable})
+    assert {:error, :unavailable} = Spotify.devices()
   end
 end
