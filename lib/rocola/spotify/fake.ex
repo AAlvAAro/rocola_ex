@@ -34,11 +34,24 @@ defmodule Rocola.Spotify.Fake do
     }
   ]
 
-  def start_link(_),
-    do: Agent.start_link(fn -> %{devices: @devices, queue: [], now: nil} end, name: __MODULE__)
+  def start_link(_), do: Agent.start_link(&seed/0, name: __MODULE__)
 
   @doc "Back to the seeded state (for tests)."
-  def reset, do: Agent.update(__MODULE__, fn _ -> %{devices: @devices, queue: [], now: nil} end)
+  def reset, do: Agent.update(__MODULE__, fn _ -> seed() end)
+
+  @doc "Test/dev seam: replace the device list, or make `devices/0` return an error."
+  @spec put_devices([Rocola.Spotify.device()] | {:error, term}) :: :ok
+  def put_devices({:error, reason}),
+    do: Agent.update(__MODULE__, &%{&1 | devices: [], devices_error: reason})
+
+  def put_devices(devices) when is_list(devices),
+    do: Agent.update(__MODULE__, &%{&1 | devices: devices, devices_error: nil})
+
+  @doc "Test/dev seam: every `transfer_playback/1` received, in order, rejected ones included."
+  @spec commands() :: [{:transfer_playback, String.t()}]
+  def commands, do: Agent.get(__MODULE__, &Enum.reverse(&1.commands))
+
+  defp seed, do: %{devices: @devices, devices_error: nil, commands: [], queue: [], now: nil}
 
   @impl true
   def search(q) do
@@ -49,11 +62,18 @@ defmodule Rocola.Spotify.Fake do
   end
 
   @impl true
-  def devices, do: {:ok, Agent.get(__MODULE__, & &1.devices)}
+  def devices do
+    case Agent.get(__MODULE__, & &1) do
+      %{devices_error: nil, devices: devices} -> {:ok, devices}
+      %{devices_error: reason} -> {:error, reason}
+    end
+  end
 
   @impl true
   def transfer_playback(id) do
     Agent.get_and_update(__MODULE__, fn s ->
+      s = %{s | commands: [{:transfer_playback, id} | s.commands]}
+
       case Enum.find(s.devices, &(&1.id == id)) do
         nil -> {{:error, :device_not_found}, s}
         %{is_restricted: true} -> {{:error, :restricted_device}, s}
