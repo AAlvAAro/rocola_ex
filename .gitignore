@@ -48,3 +48,11 @@ config/*.secret.exs
 
 # Python bytecode
 __pycache__/
+
+# Local Claude settings, tool output, backups
+.claude/settings.local.json
+.impeccable/
+*.bak
+
+# Plugin eval results
+evals/results/
