@@ -1,0 +1,321 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-05T16:44:39+00:00",
+  "title": "Design System: Rocola",
+  "extensions": {
+    "colorMeta": {
+      "tape-shell": {
+        "role": "neutral",
+        "displayName": "Cobalt Shell",
+        "canonical": "oklch(44.6% 0.207 266.6)",
+        "tonalRamp": [
+          "#010232",
+          "#09195F",
+          "#1A3391",
+          "#2D50C5",
+          "#4871F0",
+          "#6F98FF",
+          "#9DC1FF",
+          "#D2EEFF"
+        ]
+      },
+      "tape-shell-ink": {
+        "role": "neutral",
+        "displayName": "Shell Frost",
+        "canonical": "oklch(87.2% 0.055 273.9)",
+        "tonalRamp": [
+          "#080A16",
+          "#1F2334",
+          "#393E56",
+          "#555C7A",
+          "#737B9D",
+          "#959DBA",
+          "#BDC3DB",
+          "#E9EEFF"
+        ]
+      },
+      "tape-card": {
+        "role": "primary",
+        "displayName": "Tomato Card Stock",
+        "canonical": "oklch(65.6% 0.200 34.2)",
+        "tonalRamp": [
+          "#260000",
+          "#4F0000",
+          "#7C0500",
+          "#AC1E00",
+          "#D64321",
+          "#F07458",
+          "#FFA58D",
+          "#FFD9C6"
+        ]
+      },
+      "tape-card-ink": {
+        "role": "primary",
+        "displayName": "Burnt Card Ink",
+        "canonical": "oklch(52.0% 0.175 33.6)",
+        "tonalRamp": [
+          "#230000",
+          "#4B0200",
+          "#761702",
+          "#A42E14",
+          "#CD4E34",
+          "#E87B63",
+          "#FFAA95",
+          "#FFDCCC"
+        ]
+      },
+      "tape-stripe": {
+        "role": "secondary",
+        "displayName": "Chrome Mustard",
+        "canonical": "oklch(81.8% 0.160 82.5)",
+        "tonalRamp": [
+          "#190500",
+          "#3A1C00",
+          "#5E3600",
+          "#855200",
+          "#A97100",
+          "#C59630",
+          "#E4BE76",
+          "#FFEBB7"
+        ]
+      },
+      "tape-label": {
+        "role": "neutral",
+        "displayName": "Label White",
+        "canonical": "oklch(99.1% 0.003 264.5)",
+        "tonalRamp": [
+          "#0B0B0C",
+          "#242425",
+          "#3F4041",
+          "#5D5E5F",
+          "#7C7D7F",
+          "#9E9EA0",
+          "#C3C4C5",
+          "#EEEEEF"
+        ]
+      },
+      "tape-rule": {
+        "role": "neutral",
+        "displayName": "Ruled Blue",
+        "canonical": "oklch(85.7% 0.055 265.7)",
+        "tonalRamp": [
+          "#070B16",
+          "#1C2434",
+          "#353F56",
+          "#505D7A",
+          "#6F7D9D",
+          "#929EBA",
+          "#B9C4DB",
+          "#E7EFFF"
+        ]
+      },
+      "tape-ink": {
+        "role": "neutral",
+        "displayName": "Marker Ink",
+        "canonical": "oklch(19.1% 0.000 89.9)",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#242424",
+          "#404040",
+          "#5D5D5D",
+          "#7D7D7D",
+          "#9E9E9E",
+          "#C4C4C4",
+          "#EEEEEE"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Panel title printed across the J-card; container-query sized, capped at 5.5rem."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section titles on card; also the wordmark voice."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Item titles inside label lists."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Explanatory copy on card and label."
+      },
+      "label": {
+        "displayName": "Typewriter Label",
+        "purpose": "Spine, side names, numbers, codes, liner notes, captions, footer."
+      },
+      "hand": {
+        "displayName": "Marker Hand",
+        "purpose": "Guest-written tracklist entries and names only."
+      },
+      "button": {
+        "displayName": "Key Label",
+        "purpose": "Uppercase label on the deck key."
+      }
+    },
+    "shadows": [
+      {
+        "name": "card-on-shell",
+        "value": "0 24px 48px -12px rgb(10 20 80 / 0.55)",
+        "purpose": "The J-card panel lying on the cobalt shell."
+      },
+      {
+        "name": "label-on-card",
+        "value": "0 6px 16px -6px rgb(20 20 20 / 0.45)",
+        "purpose": "White labels and step lists stuck onto tomato card."
+      },
+      {
+        "name": "key-raised",
+        "value": "0 8px 12px -6px rgb(0 0 0 / 0.5)",
+        "purpose": "Deck key at rest."
+      },
+      {
+        "name": "key-pressed",
+        "value": "0 2px 4px -2px rgb(0 0 0 / 0.5)",
+        "purpose": "Deck key while pressed."
+      }
+    ],
+    "motion": [
+      {
+        "name": "tape-spin",
+        "value": "tape-spin 4s linear infinite",
+        "purpose": "Cassette reel hubs turning."
+      },
+      {
+        "name": "tape-caret",
+        "value": "tape-caret 1s steps(1) infinite",
+        "purpose": "Write-in caret blink."
+      },
+      {
+        "name": "key-press",
+        "value": "120ms ease-out",
+        "purpose": "Key travel (transform, bottom-edge width)."
+      },
+      {
+        "name": "key-hover",
+        "value": "200ms ease-out",
+        "purpose": "Key fill change to mustard."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation: none",
+        "purpose": "All world animations stop under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "container",
+        "value": "max-width 72rem"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Deck Key (Primary Button)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one primary action: a raised cassette-deck key that turns mustard on hover and presses down on click.",
+      "html": "<button class=\"ds-key\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z\" clip-rule=\"evenodd\"/></svg>Play side B</button>",
+      "css": ".ds-key{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 24px;border:0;border-radius:4px;background:var(--color-tape-label);color:var(--color-tape-ink);border-bottom:6px solid var(--color-tape-ink);box-shadow:0 8px 12px -6px rgb(0 0 0 / .5);font-family:\"Archivo\",ui-sans-serif,system-ui,sans-serif;font-weight:700;font-size:1rem;letter-spacing:.025em;text-transform:uppercase;cursor:pointer;transition:transform 120ms ease-out,border-bottom-width 120ms ease-out,background-color 200ms ease-out}.ds-key:hover{background:var(--color-tape-stripe)}.ds-key:focus-visible{outline:3px solid var(--color-tape-stripe);outline-offset:3px}.ds-key:active{transform:translateY(4px);border-bottom-width:1px;box-shadow:0 2px 4px -2px rgb(0 0 0 / .5)}"
+    },
+    {
+      "name": "J-card Panel",
+      "kind": "card",
+      "refersTo": "jcard-panel",
+      "description": "Tomato card-stock panel lying on the cobalt shell, with a typewriter spine, a wide display title and the chrome stripe band.",
+      "html": "<div class=\"ds-shell\"><section class=\"ds-jcard\"><div class=\"ds-spine\"><span>Rocola · Tonight's mix · C-90</span></div><div class=\"ds-front\"><h1 class=\"ds-display\">The jukebox</h1><div class=\"ds-stripes\"></div></div></section></div>",
+      "css": ".ds-shell{background:var(--color-tape-shell);padding:24px}.ds-jcard{display:flex;overflow:hidden;border-radius:6px;background:var(--color-tape-card);color:var(--color-tape-ink);box-shadow:0 24px 48px -12px rgb(10 20 80 / .55)}.ds-spine{width:36px;flex-shrink:0;display:flex;justify-content:center;padding-top:24px;border-right:1px dashed rgb(20 20 20 / .4)}.ds-spine span{writing-mode:vertical-rl;transform:rotate(180deg);font-family:\"Special Elite\",ui-monospace,monospace;font-size:.75rem;text-transform:uppercase;letter-spacing:.2em}.ds-front{flex:1;min-width:0}.ds-display{margin:0;padding:24px 16px;font-family:\"Archivo\",ui-sans-serif,sans-serif;font-variation-settings:\"wdth\" 125;font-weight:900;font-size:2.25rem;line-height:.92;letter-spacing:-.025em;text-transform:uppercase}.ds-stripes{height:24px;background:linear-gradient(to bottom,var(--color-tape-stripe) 0 40%,var(--color-tape-ink) 40% 60%,var(--color-tape-label) 60% 100%)}"
+    },
+    {
+      "name": "Tracklist Label",
+      "kind": "custom",
+      "refersTo": "tracklist-label",
+      "description": "White ruled label with a typewriter caption row, cassette window, marker entries on a 48px rule and a blinking write-in caret.",
+      "html": "<div class=\"ds-card-bg\"><figure class=\"ds-label\"><figcaption class=\"ds-label-cap\"><span>Side A</span><span class=\"ds-window\" aria-hidden=\"true\"><span class=\"ds-reel ds-reel-full\"><span class=\"ds-hub\"></span></span><span class=\"ds-reel\"><span class=\"ds-hub\"></span></span></span></figcaption><ol class=\"ds-ruled\"><li><span class=\"ds-num\">1</span><span class=\"ds-entry\"><span>an 80s classic</span><span>~ Luis</span></span></li><li><span class=\"ds-num\">2</span><span class=\"ds-entry ds-open\">~ you?<span class=\"ds-caret\"></span></span></li></ol><p class=\"ds-sample\">sample tracklist</p></figure></div>",
+      "css": ".ds-card-bg{background:var(--color-tape-card);padding:24px}.ds-label{margin:0;border-radius:4px;background:var(--color-tape-label);color:var(--color-tape-ink);box-shadow:0 6px 16px -6px rgb(20 20 20 / .45)}.ds-label-cap{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:2px solid var(--color-tape-ink);font-family:\"Special Elite\",ui-monospace,monospace;text-transform:uppercase;letter-spacing:.15em}.ds-window{display:flex;gap:20px;align-items:center;padding:6px 12px;border-radius:9999px;background:var(--color-tape-ink)}.ds-reel{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%}.ds-reel-full{border:5px solid var(--color-tape-card-ink);box-sizing:border-box}.ds-hub{display:block;width:16px;height:16px;border-radius:50%;border:3px dashed var(--color-tape-label);box-sizing:border-box;animation:ds-spin 4s linear infinite}@keyframes ds-spin{to{transform:rotate(360deg)}}.ds-ruled{list-style:none;margin:0;padding:4px 20px 8px;font-family:\"Permanent Marker\",cursive;font-size:1.5rem;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent calc(3rem - 1px),var(--color-tape-rule) calc(3rem - 1px),var(--color-tape-rule) 3rem)}.ds-ruled li{display:flex;align-items:center;gap:16px;height:48px}.ds-num{width:24px;font-family:\"Special Elite\",monospace;font-size:.875rem;opacity:.7}.ds-entry{flex:1;display:flex;justify-content:space-between;gap:12px}.ds-open{justify-content:flex-end;gap:4px}.ds-caret{display:inline-block;width:2px;height:24px;background:var(--color-tape-ink);animation:ds-caret 1s steps(1) infinite}@keyframes ds-caret{50%{opacity:0}}.ds-sample{margin:0;padding:0 20px 12px;text-align:right;font-family:\"Special Elite\",monospace;font-size:.75rem;opacity:.7}@media (prefers-reduced-motion:reduce){.ds-hub,.ds-caret{animation:none}}"
+    },
+    {
+      "name": "Step List",
+      "kind": "card",
+      "refersTo": "tracklist-label",
+      "description": "Back-flap steps: white label with Ruled Blue dividers, burnt-ink typewriter codes, Archivo titles and softened ink body.",
+      "html": "<div class=\"ds-card-bg2\"><ol class=\"ds-steps\"><li><span class=\"ds-code\">B1</span><div><h3>Scan the QR</h3><p>No app or account needed. Just the phone camera.</p></div></li><li><span class=\"ds-code\">B2</span><div><h3>Search a song</h3><p>Find any track in the Spotify catalog.</p></div></li></ol></div>",
+      "css": ".ds-card-bg2{background:var(--color-tape-card);padding:24px}.ds-steps{list-style:none;margin:0;padding:0;border-radius:4px;background:var(--color-tape-label);color:var(--color-tape-ink);box-shadow:0 6px 16px -6px rgb(20 20 20 / .45);font-family:\"Archivo\",ui-sans-serif,sans-serif}.ds-steps li{display:grid;grid-template-columns:4rem 1fr;align-items:baseline;padding:24px 32px}.ds-steps li+li{border-top:1px solid var(--color-tape-rule)}.ds-code{font-family:\"Special Elite\",monospace;font-size:1.125rem;color:var(--color-tape-card-ink)}.ds-steps h3{margin:0;font-size:1.5rem;font-weight:800}.ds-steps p{margin:4px 0 0;font-size:1.125rem;color:rgb(20 20 20 / .75)}"
+    },
+    {
+      "name": "Liner Notes",
+      "kind": "card",
+      "refersTo": "liner-notes",
+      "description": "Flat tomato card with a wide headline over typewriter sentences; for rules and fine print that must be read.",
+      "html": "<div class=\"ds-shell2\"><div class=\"ds-liner\"><h2>House rules</h2><ul><li>Up to 3 songs per guest every 30 minutes, so everyone gets a turn.</li><li>A song that's already in the queue can't be requested again.</li></ul></div></div>",
+      "css": ".ds-shell2{background:var(--color-tape-shell);padding:24px}.ds-liner{border-radius:4px;background:var(--color-tape-card);color:var(--color-tape-ink);padding:32px}.ds-liner h2{margin:0;font-family:\"Archivo\",ui-sans-serif,sans-serif;font-variation-settings:\"wdth\" 125;font-weight:900;font-size:3rem;line-height:1;letter-spacing:-.025em;text-transform:uppercase}.ds-liner ul{list-style:none;margin:24px 0 0;padding:0;font-family:\"Special Elite\",monospace;font-size:1.125rem;line-height:1.625}.ds-liner li+li{margin-top:12px}"
+    },
+    {
+      "name": "Header",
+      "kind": "nav",
+      "description": "Wide uppercase wordmark on the shell with a typewriter tagline in Shell Frost.",
+      "html": "<header class=\"ds-header\"><a href=\"#\" class=\"ds-wordmark\">Rocola</a><p class=\"ds-tagline\">a home jukebox</p></header>",
+      "css": ".ds-header{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:32px 24px 24px;background:var(--color-tape-shell)}.ds-wordmark{color:var(--color-tape-label);text-decoration:none;font-family:\"Archivo\",ui-sans-serif,sans-serif;font-variation-settings:\"wdth\" 125;font-weight:900;font-size:1.875rem;letter-spacing:-.025em;text-transform:uppercase}.ds-wordmark:hover{text-decoration:underline;text-underline-offset:.2em}.ds-wordmark:focus-visible{outline:3px solid var(--color-tape-stripe);outline-offset:3px}.ds-tagline{margin:0;font-family:\"Special Elite\",monospace;font-size:.875rem;color:var(--color-tape-shell-ink)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Tonight's Mix",
+    "overview": "Rocola is printed, not rendered. Every surface is a piece of cassette packaging: a tomato card-stock J-card lying on a cobalt cassette shell, with a chrome-tape stripe band, a cool-white ruled label written on in black marker, and typewriter captions. The queue is a mixtape the whole room writes, so the system's job is to make a shared list feel handmade and fair, not to look like a streaming app.\n\nThe palette is loud and warm-on-cool: two saturated grounds (cobalt and tomato) carry near-black ink, and a single mustard accent marks everything interactive. Depth is physical, the way paper sits on plastic: soft cast shadows under the card and labels, never glow. Three voices share the work: an extended heavy grotesk prints headings like a J-card title, a typewriter face does the small factual labels, and a marker hand fills in what guests wrote.\n\nThe world is a single fixed scheme. It does not change with the OS light/dark preference; cobalt, tomato and white are the same at midnight as at noon.",
+    "keyCharacteristics": [
+      "Cobalt shell ground, tomato card panels, white ruled labels, near-black ink.",
+      "Mustard is the only interactive accent (focus ring, hover, selection, caret).",
+      "Extended uppercase Archivo headings; Special Elite labels; Permanent Marker entries.",
+      "Ruled 48px rows on labels; dashed fold and perforation lines.",
+      "Soft cast shadows only; small 4–6px corners.",
+      "Motion is mechanical and small: turning reels, a blinking caret, a key that presses down."
+    ],
+    "rules": [
+      {
+        "name": "The One Mustard Rule",
+        "body": "Mustard means \"you can act here\" (focus, hover, selection, caret) plus its native place in the stripe band. It never fills a panel or colors body text.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink-Not-Grey Rule",
+        "body": "Quiet text on card or label is Marker Ink at reduced opacity (70% for codes and captions, 75% for step descriptions), not a separate grey token.",
+        "section": "colors"
+      },
+      {
+        "name": "The Three Voices Rule",
+        "body": "Print (Archivo) explains, typewriter (Special Elite) labels and states facts, marker (Permanent Marker) is what guests wrote. Don't swap their jobs.",
+        "section": "typography"
+      },
+      {
+        "name": "The Wide Title Rule",
+        "body": "Only Display, Headline and the wordmark get wdth 125 and uppercase; body and titles stay at wdth 100 in sentence case.",
+        "section": "typography"
+      },
+      {
+        "name": "The Paper-On-Plastic Rule",
+        "body": "A shadow only says one material lies on another. Card on shell gets the large tinted shadow, label on card gets the small one; never stack a third level.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do lay every surface on the Cobalt Shell and build panels from Tomato Card Stock and Label White.",
+      "Do use Chrome Mustard for focus (3px outline, 3px offset), hover and selection, and nowhere else except the stripe band.",
+      "Do set guest-written content in Permanent Marker on a ruled Label White surface with 48px rows.",
+      "Do write labels, codes, captions and fine print in Special Elite.",
+      "Do keep motion mechanical and small (reels at 4s linear, caret at 1s stepped, key press at 120ms ease-out), and switch all of it off under `prefers-reduced-motion`.",
+      "Do label any example queue content as a sample, in a typewriter caption on the label."
+    ],
+    "donts": [
+      "Don't re-skin the world for dark mode; the palette is fixed.",
+      "Don't use Permanent Marker for headings, buttons or explanatory copy.",
+      "Don't introduce greys; soften Marker Ink with opacity instead.",
+      "Don't use unblurred offset box-shadows, glows or more than two shadow levels. (The deck key's 6px ink bottom edge is a border, the key's own body, and stays.)",
+      "Don't round panels beyond 6px or make anything but the cassette window and its reels a pill or circle."
+    ]
+  }
+}

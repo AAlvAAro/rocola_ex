@@ -91,6 +91,67 @@
   --noise: 0;
 }
 
+/* Rocola landing: cassette J-card world. Direction contract in .impeccable/surfaces/home.md */
+@theme {
+  --color-tape-shell: #2140C4;
+  --color-tape-shell-ink: #C9D3FA;
+  --color-tape-card: #F25430;
+  --color-tape-card-ink: #B83214;
+  --color-tape-stripe: #F6B827;
+  --color-tape-label: #FBFCFE;
+  --color-tape-rule: #BFD0F5;
+  --color-tape-ink: #141414;
+
+  --font-tape-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-tape-type: "Special Elite", ui-monospace, monospace;
+  --font-tape-hand: "Permanent Marker", cursive;
+
+  --animate-tape-spin: tape-spin 4s linear infinite;
+  --animate-tape-caret: tape-caret 1s steps(1) infinite;
+
+  @keyframes tape-spin {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes tape-caret {
+    50% { opacity: 0; }
+  }
+}
+
+.tape-world {
+  font-variation-settings: "wdth" 100;
+  scrollbar-color: var(--color-tape-stripe) var(--color-tape-shell);
+  caret-color: var(--color-tape-stripe);
+  accent-color: var(--color-tape-stripe);
+}
+.tape-world ::selection { background: var(--color-tape-stripe); color: var(--color-tape-ink); }
+.tape-world :focus-visible { outline: 3px solid var(--color-tape-stripe); outline-offset: 3px; }
+.tape-world a { text-underline-offset: 0.2em; }
+.tape-wide { font-variation-settings: "wdth" 125; }
+/* Ruled tracklist paper */
+.tape-ruled {
+  background-image: repeating-linear-gradient(
+    to bottom, transparent 0, transparent calc(3rem - 1px), var(--color-tape-rule) calc(3rem - 1px), var(--color-tape-rule) 3rem
+  );
+}
+/* Cassette-deck key: raised, presses down */
+.tape-key {
+  background: var(--color-tape-label);
+  color: var(--color-tape-ink);
+  border-bottom: 6px solid var(--color-tape-ink);
+  box-shadow: 0 8px 12px -6px rgb(0 0 0 / 0.5);
+  transition: transform 120ms ease-out, border-bottom-width 120ms ease-out, background-color 200ms ease-out;
+}
+.tape-key:hover { background: var(--color-tape-stripe); }
+.tape-key:active { transform: translateY(4px); border-bottom-width: 1px; box-shadow: 0 2px 4px -2px rgb(0 0 0 / 0.5); }
+/* Chrome-tape stripe band: mustard, ink, label white */
+.tape-stripes {
+  background: linear-gradient(to bottom,
+    var(--color-tape-stripe) 0 40%, var(--color-tape-ink) 40% 60%, var(--color-tape-label) 60% 100%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tape-world * { animation: none !important; }
+}
+
 /* Add variants based on LiveView classes */
 @custom-variant phx-click-loading (.phx-click-loading&, .phx-click-loading &);
 @custom-variant phx-submit-loading (.phx-submit-loading&, .phx-submit-loading &);
