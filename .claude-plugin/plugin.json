@@ -1,0 +1,12 @@
+{
+  "name": "rocola",
+  "version": "0.1.0",
+  "description": "Rocola's /ship ticket-to-commit workflow and its agents (tech-lead, product-reviewer, builder, code-reviewer), packaged for claude plugin eval.",
+  "commands": ["./.claude/commands/ship.md"],
+  "agents": [
+    "./.claude/agents/tech-lead.md",
+    "./.claude/agents/product-reviewer.md",
+    "./.claude/agents/builder.md",
+    "./.claude/agents/code-reviewer.md"
+  ]
+}
