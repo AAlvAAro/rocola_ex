@@ -56,3 +56,6 @@ __pycache__/
 
 # Plugin eval results
 evals/results/
+
+# Homework guides (personal step-by-step, not part of the project)
+docs/hw/
