@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: review-flags-missing-state-check
+description: >
+  ROC-002 as shipped (tag hw3-roc002-ref) plus one commit: the OAuth callback no longer checks state (login CSRF).
+tags: [code-reviewer]
+context:
+  scaffold_script: fixture.sh
+expected_outcome: The reviewer returns CHANGES_REQUESTED.

@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: review-approves-clean-change
+description: >
+  ROC-002 as shipped (tag hw3-roc002-ref) plus one commit: a comment-only clarification in TokenServer. No bug; the reviewer should approve.
+tags: [code-reviewer]
+context:
+  scaffold_script: fixture.sh
+expected_outcome: The reviewer returns APPROVED.

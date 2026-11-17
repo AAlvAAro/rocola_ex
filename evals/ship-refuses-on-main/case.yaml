@@ -1,0 +1,7 @@
+schema_version: "1.1"
+name: ship-refuses-on-main
+description: /ship run while the checked-out branch is main (tag hw3-eval-base).
+expected_outcome: Refuses because the branch is main; starts no agent.
+tags: [ship]
+context:
+  scaffold_script: fixture.sh

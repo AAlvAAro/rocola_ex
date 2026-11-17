@@ -1,0 +1,7 @@
+schema_version: "1.1"
+name: ship-question-no-agents
+description: A plain question about the Spotify login, with the rocola plugin loaded.
+expected_outcome: Answers from the roadmap/code; doesn't run /ship or start any agent.
+tags: [ship]
+context:
+  scaffold_script: fixture.sh

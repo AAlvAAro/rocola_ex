@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: product-rejects-extra-scopes
+description: >
+  ROC-002 design doc (from tag hw3-roc002-ref, old product review stripped) on
+  the pre-ROC-002 code (tag hw3-eval-base). Changed to request library and playlist scopes it doesn't need.
+expected_outcome: The product reviewer returns REJECTED.
+tags: [product-reviewer]
+context:
+  scaffold_script: fixture.sh

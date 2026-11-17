@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: review-flags-token-in-db
+description: >
+  ROC-002 as shipped (tag hw3-roc002-ref) plus one commit: tokens are persisted to SQLite via a new migration and schema (CLAUDE.md rule 5).
+tags: [code-reviewer]
+context:
+  scaffold_script: fixture.sh
+expected_outcome: The reviewer returns CHANGES_REQUESTED.

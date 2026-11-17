@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: review-flags-token-log
+description: >
+  ROC-002 as shipped (tag hw3-roc002-ref) plus one commit that logs the Spotify
+  access token in TokenServer. The code-reviewer agent must request changes
+  (CLAUDE.md rule 5: never log tokens).
+expected_outcome: The reviewer returns CHANGES_REQUESTED and flags the token log line.
+tags: [code-reviewer, security]
+context:
+  scaffold_script: fixture.sh

@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: review-flags-no-refresh
+description: >
+  ROC-002 as shipped (tag hw3-roc002-ref) plus one commit: TokenServer.store/2 no longer schedules the refresh, so the token expires.
+tags: [code-reviewer]
+context:
+  scaffold_script: fixture.sh
+expected_outcome: The reviewer returns CHANGES_REQUESTED.

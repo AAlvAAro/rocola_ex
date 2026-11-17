@@ -1,0 +1,7 @@
+schema_version: "1.1"
+name: ship-unknown-ticket
+description: /ship ROC-999 on a feature branch; ROC-999 is not in docs/roadmap.md.
+expected_outcome: Says ROC-999 doesn't exist; doesn't fall back to another ticket; starts no agent.
+tags: [ship]
+context:
+  scaffold_script: fixture.sh
